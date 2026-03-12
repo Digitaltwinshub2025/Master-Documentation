@@ -3,340 +3,463 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Digital Twin Project Hub</title>
+  <title>Digital Twins Master Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#05060a;
-      --card:#ffffff;
-      --border:#d7dbe7;
-      --shadow:0 10px 25px rgba(20,30,60,.12);
-      --shadow-soft:0 8px 18px rgba(20,30,60,.10);
-      --radius:16px;
-      --gap:24px;
-      --labelW:190px;
-      --cardH:120px;
-      --pageTopPad: clamp(24px, 10vh, 220px);
-      --line: rgba(255,255,255,.18);
-      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    :root {
+      --bg: #0a0a0d;
+      --panel: #121217;
+      --panel-2: #181820;
+      --line: rgba(255,255,255,0.08);
+      --text: #f5f5f2;
+      --muted: #a9a9b3;
+      --accent: #ffffff;
+      --accent-2: #d6d6dc;
+      --radius: 22px;
+      --max: 1400px;
+      --shadow: 0 24px 60px rgba(0,0,0,0.45);
     }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:var(--font);
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent 20%), #0a0a0d;
+      color: var(--text);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image:
+        linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px);
+      background-size: 4px 4px, 4px 4px;
+      mix-blend-mode: soft-light;
+      z-index: 0;
+    }
+
+    .site {
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 30;
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(10,10,13,0.9), rgba(10,10,13,0.45), transparent);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--accent-2);
+    }
+
+    .brand-mark {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 0 22px rgba(255,255,255,0.4);
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color .25s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: #fff;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-left,
+    .hero-right {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .hero-left {
+      padding: 120px 7vw 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .kicker {
+      color: var(--muted);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3.6rem, 8vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      font-weight: 700;
+      max-width: 780px;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin-top: 28px;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      margin-top: 38px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      transition: transform .22s ease, background .22s ease, border-color .22s ease;
+    }
+
+    .btn.primary {
+      background: #fff;
+      color: #111;
+      border-color: #fff;
+    }
+
+    .btn.secondary {
+      color: #fff;
+      background: transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 54px;
+      max-width: 720px;
+    }
+
+    .meta-card {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .meta-card strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .meta-card span {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-right {
+      border-left: 1px solid var(--line);
       background:
-        repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 64px),
-        repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 64px),
-        var(--bg);
-      color:#e9edff;
-      min-height:100vh;
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+        radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 58%);
+      overflow: hidden;
     }
 
-    .page-title{
-      position:fixed;
-      top:16px;
-      left:0;
-      right:0;
-      text-align:center;
-      font-weight:900;
-      font-size:28px;
-      letter-spacing:.2px;
-      color:#f4f6ff;
-      z-index:10;
-      pointer-events:none;
-    }
-
-    .page-title::before{
-      display:none;
-    }
-
-    .page-title::after{
-      display:none;
-    }
-
-    .title-connectors{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:9;
-    }
-
-    .title-connectors .tc-h{
-      position:absolute;
-      height:4px;
-      background: var(--line);
-      border-radius: 999px;
-    }
-
-    .title-connectors .tc-v{
-      position:absolute;
-      width:4px;
-      background: var(--line);
-      border-radius: 999px;
-    }
-
-    .title-connectors .tc-v::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom:-1px;
-      transform: translateX(-50%);
-      width:0;
-      height:0;
-      border-left:7px solid transparent;
-      border-right:7px solid transparent;
-      border-top:9px solid var(--line);
-    }
-
-    .page{
-      max-width:none;
-      margin:0 auto;
-      padding-top: var(--pageTopPad);
-    }
-
-    .projects-grid{
-      display:grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: var(--gap);
-      align-items:start;
-      position:relative;
-      --topPad: 26px;
-      padding-top: var(--topPad);
-      overflow: visible;
-    }
-
-    .projects-grid::before{
-      content:"";
-      position:absolute;
-      left: calc(var(--gap) / 2);
-      right: calc(var(--gap) / 2);
-      top: calc(var(--topPad) + (var(--cardH) / 2));
-      height: 3px;
-      background: var(--line);
-      pointer-events:none;
-      z-index:0;
-    }
-
-    .project-col{
-      display:flex;
-      flex-direction:column;
-      gap: var(--gap);
-      min-width:0;
-      position:relative;
-    }
-
-    .project-col .report-card{
-      display:flex;
-    }
-
-    .project-col::before{
-      content:"";
-      position:absolute;
-      left:50%;
-      top: var(--cardH);
-      width:3px;
-      height: calc((4 * var(--cardH)) + (4 * var(--gap)));
-      transform: translateX(-50%);
-      background: var(--line);
-      pointer-events:none;
-      z-index:0;
-    }
-
-    .project-col > .project-pill:not(:last-child)::after,
-    .project-col > .report-card:not(:last-child)::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom: calc(-1 * (var(--gap) / 2));
-      width:8px;
-      height:8px;
-      transform: translateX(-50%);
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow: var(--shadow-soft);
-      pointer-events:none;
-      z-index:0;
-    }
-
-    .project-pill{
-      height:var(--cardH);
-      border-radius:18px;
-      width:100%;
-      position:relative;
-      z-index:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:8px;
-      color:#fff;
-      font-weight:900;
-      letter-spacing:.2px;
-      text-shadow:0 2px 6px rgba(0,0,0,.2);
+    .showcase {
+      position: absolute;
+      inset: 90px 40px 40px 40px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #15151c, #0d0d12 60%);
       box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.25);
-      user-select:none;
-      cursor:pointer;
     }
 
-    .project-col.is-active .project-pill{
-      box-shadow: 0 14px 34px rgba(20,30,60,.18);
-      outline: 2px solid rgba(255,255,255,.18);
-      outline-offset: 2px;
+    .showcase::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 36%),
+        radial-gradient(circle at 78% 18%, rgba(255,255,255,0.08), transparent 18%),
+        radial-gradient(circle at 18% 74%, rgba(255,255,255,0.05), transparent 24%);
     }
 
-    .project-pill .project-name{
-      display:block;
-      font-size:18px;
-      line-height:1.15;
-      width:100%;
-      max-width:100%;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
+    .showcase-grid {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1.2fr 0.8fr;
+      gap: 1px;
+      background: var(--line);
     }
 
-    .report-card{
-      height:var(--cardH);
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-      overflow:hidden;
-      position:relative;
-      z-index:1;
-      display:flex;
-      flex-direction:column;
-      width: calc(100% - 34px);
+    .showcase-card {
+      position: relative;
+      background: #111117;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .showcase-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -60px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      filter: blur(4px);
+    }
+
+    .showcase-card small {
+      position: relative;
+      z-index: 1;
+      color: #bdbdc7;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .showcase-card strong {
+      position: relative;
+      z-index: 1;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .section {
+      padding: 110px 28px 40px;
+    }
+
+    .section-inner {
+      width: min(var(--max), 100%);
       margin: 0 auto;
     }
 
-    .report-header{
-      padding:6px 10px;
-      font-weight:900;
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      letter-spacing:.2px;
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 36px;
     }
 
-    .report-body{
-      padding:6px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex:1;
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 4rem);
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      text-transform: uppercase;
     }
 
-    .hint{
-      color: rgba(233,237,255,.70);
-      font-size:12px;
-      line-height:1.25;
-      max-width:68%;
+    .section-head p {
+      margin: 0;
+      max-width: 520px;
+      color: var(--muted);
+      line-height: 1.8;
     }
 
-    .actions{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      flex-shrink:0;
+    .projects {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
     }
 
-    /* Multi-video UI */
-    .video-list{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      font-size:11px;
-      line-height:1.2;
+    .project {
+      position: relative;
+      min-height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #15151b, #0f1014);
+      box-shadow: var(--shadow);
+      transition: transform .28s ease, border-color .28s ease;
     }
 
-    [data-role="videoActions"]{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      align-items:flex-end;
+    .project:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.18);
     }
 
-    .btn{
-      appearance:none;
-      border:1px solid rgba(255,255,255,.28);
-      background:rgba(255,255,255,.16);
-      color:#fff;
-      font-weight:800;
-      padding:8px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      transition: transform .06s ease, filter .15s ease;
-      white-space:nowrap;
+    .project-visual {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.48)),
+        radial-gradient(circle at top right, rgba(255,255,255,0.11), transparent 24%),
+        radial-gradient(circle at 15% 80%, rgba(255,255,255,0.07), transparent 22%),
+        linear-gradient(135deg, #1b1c24, #0e0f14 60%);
     }
 
-    .btn:active{ transform: translateY(1px); }
-
-    .btn-secondary{
-      border:1px solid var(--border);
-      background:#fff;
-      color:#1b2236;
-      font-weight:800;
-      font-size:10px;
-      height:24px;
-      line-height:24px;
-      padding:0 10px;
-      border-radius:10px;
+    .project-visual::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
     }
 
-    .btn-secondary[disabled]{
-      opacity:.55;
-      cursor:not-allowed;
+    .project-content {
+      position: absolute;
+      inset: 0;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 18px;
     }
 
-    .file-name{
-      font-size:10px;
-      color:#2b344f;
-      font-weight:700;
-      max-width:100%;
-      overflow:hidden;
-      line-height:1.2;
-      display:-webkit-box;
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:2;
-      line-clamp:2;
-      white-space:normal;
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
     }
 
-    .report-card[data-report="AURA Report"] .file-name{
-      display:none;
+    .project-label {
+      font-size: 11px;
+      color: #c7c7cf;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 10px;
     }
 
-    .report-card[data-report="Flipthrough"] [data-role="streamLabel"],
-    .report-card[data-report="Flipthrough"] .hint{
-      display:none;
+    .project h3 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+      text-transform: uppercase;
     }
 
-    .report-meta{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      min-width:0;
-      flex:1;
+    .status {
+      white-space: nowrap;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:2px 8px;
-      border-radius:999px;
-      background:#eef2ff;
-      color:#253056;
-      border:1px solid #dbe2ff;
-      width:fit-content;
-      font-size:10px;
-      font-weight:800;
+    .project p {
+      margin: 0;
+      max-width: 540px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .action {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background .22s ease, border-color .22s ease;
+      cursor: pointer;
+    }
+
+    .action:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.24);
+    }
+
+    .action.is-disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .footer {
+      padding: 60px 28px 80px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 11px;
+    }
+
+    .footer-inner {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
     }
 
     .modal{
@@ -355,13 +478,17 @@
     .modal-card{
       width:min(1100px, 100%);
       height:min(88vh, 900px);
-      background:#fff;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border-radius:18px;
       overflow:hidden;
-      box-shadow:0 25px 65px rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.25);
+      box-shadow:
+        0 28px 80px rgba(0,0,0,.62),
+        0 0 0 1px rgba(255,255,255,.10),
+        0 26px 90px rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
       display:flex;
       flex-direction:column;
+      backdrop-filter: blur(10px);
     }
 
     .modal-top{
@@ -370,9 +497,9 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      background:linear-gradient(90deg,#0b1a3a,#143a88);
-      color:#fff;
-      font-weight:900;
+      background: linear-gradient(90deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      color: rgba(255,255,255,.92);
+      font-weight:800;
     }
 
     .modal-title{
@@ -389,6 +516,190 @@
       border-radius:12px;
       padding:8px 10px;
       cursor:pointer;
+    }
+
+    .scroll-card{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:min(360px, calc(100vw - 36px));
+      z-index:11;
+      transform: translateY(0);
+      opacity: 1;
+      transition: transform .22s ease, opacity .22s ease;
+    }
+
+    .scroll-card.is-hidden{
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events:none;
+    }
+
+    .scroll-card .sc-shell{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 20px;
+      box-shadow:
+        0 26px 70px rgba(0,0,0,.62),
+        0 0 0 1px rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+
+    .scroll-card .sc-shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(300px 180px at 20% 0%, rgba(214,179,106,.16), transparent 70%),
+        radial-gradient(260px 160px at 100% 30%, rgba(255,255,255,.06), transparent 70%);
+      opacity:.9;
+    }
+
+    .scroll-card .sc-shell{
+      position:relative;
+    }
+
+    .scroll-card .sc-shell::after{
+      content:"";
+      position:absolute;
+      left:0;
+      top:10px;
+      bottom:10px;
+      width:2px;
+      border-radius:999px;
+      background: linear-gradient(180deg, rgba(214,179,106,.0), rgba(214,179,106,.55), rgba(214,179,106,.0));
+      opacity:.85;
+      pointer-events:none;
+    }
+
+    .scroll-card .sc-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 14px;
+      position:relative;
+    }
+
+    .scroll-card .sc-title{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .scroll-card .sc-title strong{
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(243,228,191,.95);
+    }
+
+    .scroll-card .sc-title span{
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .scroll-card .sc-toggle{
+      height:34px;
+      padding:0 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,14,.35);
+      color: var(--text);
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      white-space:nowrap;
+    }
+
+    .scroll-card .sc-toggle:hover{
+      background: rgba(10,10,14,.50);
+      border-color: rgba(214,179,106,.50);
+    }
+
+    .scroll-card .sc-panel{
+      max-height: 0;
+      overflow:hidden;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: max-height .24s ease, opacity .18s ease, transform .18s ease;
+      border-top: 1px solid rgba(255,255,255,.09);
+      position:relative;
+    }
+
+    .scroll-card.is-open .sc-panel{
+      max-height: 220px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-card .sc-panel-inner{
+      padding: 12px 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .scroll-card .sc-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 11px 11px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    }
+
+    .scroll-card .sc-item:hover{
+      border-color: rgba(214,179,106,.22);
+    }
+
+    .scroll-card .sc-item-label{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .scroll-card .sc-item-label b{
+      font-size:12px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .scroll-card .sc-item-label i{
+      font-style:normal;
+      font-size:11px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .scroll-card .sc-jump{
+      height:30px;
+      padding:0 10px;
+      border-radius: 999px;
+      border:1px solid rgba(214,179,106,.30);
+      background: rgba(214,179,106,.10);
+      color: rgba(243,228,191,.95);
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      flex-shrink:0;
+    }
+
+    .scroll-card .sc-jump:hover{
+      background: rgba(214,179,106,.14);
+      border-color: rgba(214,179,106,.50);
     }
 
     .modal-frame{
@@ -413,448 +724,100 @@
     .hF{ background: linear-gradient(90deg,#64dddd,#2aa2aa); }
     .hG{ background: linear-gradient(90deg,#ffe39a,#e0b545); }
 
-    @media (max-width: 980px){
-      .projects-grid{ grid-template-columns: 1fr; }
-      .projects-grid::before{ display:none; }
-      .project-col::before{ display:none; }
-      .project-col::after{ display:none; }
-      .project-col > .project-pill:not(:last-child)::after,
-      .project-col > .report-card:not(:last-child)::after{ display:none; }
-      .page{ padding-top: 24px; }
-      .project-pill::before{ display:none; }
-      .project-pill{ height:auto; min-height:86px; }
-      .report-card{ height:auto; min-height:128px; }
-      .hint{ max-width:100%; }
-      .actions{ width:100%; justify-content:flex-end; flex-wrap:wrap; }
-      .report-body{ flex-direction:column; align-items:stretch; }
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 58vh; border-left: 0; border-top: 1px solid var(--line); }
+      .projects { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .topbar { padding: 16px 18px; }
+      .nav { display: none; }
+      .hero-left { padding: 110px 22px 50px; }
+      .hero-meta { grid-template-columns: 1fr; }
+      .showcase { inset: 24px; }
+      .showcase-grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); }
+      .section { padding: 84px 18px 26px; }
+      .section-head { flex-direction: column; align-items: start; }
+      .project { min-height: 380px; }
+      .project-content { padding: 22px; }
+      .footer { padding: 44px 18px 60px; }
     }
   </style>
 </head>
 <body>
-  <div class="page-title">Digital Twins Master Documentation</div>
-  <div class="title-connectors" id="titleConnectors" aria-hidden="true"></div>
-  <div class="page">
-    <div class="projects-grid">
-      <div class="project-col">
-        <div class="project-pill cA"><span class="project-name">ShadeLA</span></div>
+  <div class="noise"></div>
+  <div class="site">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <span>Digital Twins Documentation</span>
+      </div>
+      <nav class="nav">
+        <a href="#home" class="active">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="https://digitaltwinshub2025.github.io/Master-Documentation/" target="_blank" rel="noreferrer">Current Site</a>
+      </nav>
+    </header>
 
-        <section class="report-card" data-project="ShadeLA" data-report="Arc GIS Report" data-color="A">
-          <header class="report-header hA">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
+    <section class="hero" id="home">
+      <div class="hero-left">
+        <div class="kicker">Trigger-style full screen portfolio</div>
+        <h1>Digital<br>Twin<br>Hub</h1>
+        <p class="hero-copy">
+          A darker, more cinematic portfolio layout inspired by the Trigger AJAX look: fullscreen composition, strong typography, minimal navigation, immersive project panels, and a sleek editorial presentation for your documentation hub.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#projects">View Projects</a>
+          <a class="btn secondary" href="https://digitaltwinshub2025.github.io/Master-Documentation/" target="_blank" rel="noreferrer">Open Current Site</a>
+        </div>
+        <div class="hero-meta">
+          <div class="meta-card">
+            <strong id="metaProjectCount">07</strong>
+            <span>Featured Projects</span>
           </div>
-        </section>
-
-        <section class="report-card" data-project="ShadeLA" data-report="AURA Report" data-color="A" data-pdf-source="folder">
-          <header class="report-header hA">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
+          <div class="meta-card">
+            <strong>Maps</strong>
+            <span>ArcGIS Reports</span>
           </div>
-        </section>
-
-        <section class="report-card" data-project="ShadeLA" data-report="Flipthrough" data-color="A" data-streaming="pixel">
-          <header class="report-header hA">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
+          <div class="meta-card">
+            <strong>Media</strong>
+            <span>PDF / Video / Stream</span>
           </div>
-        </section>
-
-        <section class="report-card" data-project="ShadeLA" data-report="Video" data-color="A" data-video="video">
-          <header class="report-header hA">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
 
-      <div class="project-col">
-        <div class="project-pill cB"><span class="project-name">Pando</span></div>
-
-        <section class="report-card" data-project="Pando" data-report="Arc GIS Report" data-color="B">
-          <header class="report-header hB">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
+      <div class="hero-right">
+        <div class="showcase">
+          <div class="showcase-grid" id="showcaseGrid">
+            <div class="showcase-card"><small>Featured</small><strong>ShadeLA</strong></div>
+            <div class="showcase-card"><small>Research</small><strong>Pando</strong></div>
+            <div class="showcase-card"><small>Community</small><strong>USGBC</strong></div>
+            <div class="showcase-card"><small>Landscape</small><strong>Baldwin Hills</strong></div>
           </div>
-        </section>
-
-        <section class="report-card" data-project="Pando" data-report="AURA Report" data-color="B" data-pdf-source="folder">
-          <header class="report-header hB">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Pando" data-report="Flipthrough" data-color="B" data-streaming="pixel">
-          <header class="report-header hB">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Pando" data-report="Video" data-color="B" data-video="video">
-          <header class="report-header hB">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
+    </section>
 
-      <div class="project-col">
-        <div class="project-pill cG"><span class="project-name">USGBC</span></div>
+    <section class="section" id="projects">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2>Selected<br>Projects</h2>
+          <p>
+            Each card follows the same portfolio language and still supports your practical links for ArcGIS, AURA, Flipthrough, and project videos.
+          </p>
+        </div>
 
-        <section class="report-card" data-project="USGBC" data-report="Arc GIS Report" data-color="G">
-          <header class="report-header hG">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="USGBC" data-report="AURA Report" data-color="G" data-pdf-source="folder">
-          <header class="report-header hG">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="USGBC" data-report="Flipthrough" data-color="G" data-streaming="pixel">
-          <header class="report-header hG">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="USGBC" data-report="Video" data-color="G" data-video="video">
-          <header class="report-header hG">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
+        <div class="projects" id="projectsGrid"></div>
       </div>
+    </section>
 
-      <div class="project-col">
-        <div class="project-pill cC"><span class="project-name">Baldwin Hills</span></div>
-
-        <section class="report-card" data-project="Baldwin Hills" data-report="Arc GIS Report" data-color="C">
-          <header class="report-header hC">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Baldwin Hills" data-report="AURA Report" data-color="C" data-pdf-source="folder">
-          <header class="report-header hC">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Baldwin Hills" data-report="Flipthrough" data-color="C" data-streaming="pixel">
-          <header class="report-header hC">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Baldwin Hills" data-report="Video" data-color="C" data-video="video">
-          <header class="report-header hC">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>Digital Twins Master Documentation</span>
+        <span>Trigger-inspired dark portfolio layout</span>
       </div>
-
-      <div class="project-col">
-        <div class="project-pill cF"><span class="project-name">Altadena</span></div>
-
-        <section class="report-card" data-project="Altadena" data-report="Arc GIS Report" data-color="F">
-          <header class="report-header hF">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Altadena" data-report="AURA Report" data-color="F" data-pdf-source="folder">
-          <header class="report-header hF">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Altadena" data-report="Flipthrough" data-color="F" data-streaming="pixel">
-          <header class="report-header hF">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Altadena" data-report="Video" data-color="F" data-video="video">
-          <header class="report-header hF">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="project-col">
-        <div class="project-pill cD"><span class="project-name">PUHC PUEDE</span></div>
-
-        <section class="report-card" data-project="PUHC PUEDE" data-report="Arc GIS Report" data-color="D">
-          <header class="report-header hD">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="PUHC PUEDE" data-report="AURA Report" data-color="D" data-pdf-source="folder">
-          <header class="report-header hD">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="PUHC PUEDE" data-report="Flipthrough" data-color="D" data-streaming="pixel">
-          <header class="report-header hD">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="PUHC PUEDE" data-report="Video" data-color="D" data-video="video">
-          <header class="report-header hD">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="project-col">
-        <div class="project-pill cE"><span class="project-name">Reclamation</span></div>
-
-        <section class="report-card" data-project="Reclamation" data-report="Arc GIS Report" data-color="E">
-          <header class="report-header hE">
-            <span>Arc GIS Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="open-arcgis" disabled>Open Map</button>
-              <div class="file-name" data-role="filename">Not configured</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Reclamation" data-report="AURA Report" data-color="E" data-pdf-source="folder">
-          <header class="report-header hE">
-            <span>AURA Report</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <button class="btn-secondary" type="button" data-action="view" disabled>View PDF</button>
-              <div class="file-name" data-role="filename">No PDF selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Reclamation" data-report="Flipthrough" data-color="E" data-streaming="pixel">
-          <header class="report-header hE">
-            <span>Flipthrough</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Stream</span>
-              <div class="file-name" data-role="streamLabel">Not configured</div>
-              <div class="hint">Set a URL to open your Flipthrough session.</div>
-            </div>
-            <div class="actions">
-              <button class="btn-secondary" type="button" data-action="open-stream" disabled>Open</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="report-card" data-project="Reclamation" data-report="Video" data-color="E" data-video="video">
-          <header class="report-header hE">
-            <span>Video</span>
-          </header>
-          <div class="report-body">
-            <div class="report-meta">
-              <span class="badge">Video</span>
-              <div class="file-name video-list" data-role="videoList">Not configured</div>
-              <div class="hint">Set one or more URLs to open project videos.</div>
-            </div>
-            <div class="actions">
-              <div data-role="videoActions"></div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
+    </footer>
   </div>
 
   <div class="modal" id="pdfModal" aria-hidden="true">
@@ -991,189 +954,148 @@
       if(e.key === 'Escape' && modal.hasAttribute('open')) closeModal();
     });
 
-    document.querySelectorAll('.report-card').forEach(card => {
-      const viewBtn = card.querySelector('[data-action="view"]');
-      const fileName = card.querySelector('[data-role="filename"]');
+    const projectsGrid = document.getElementById('projectsGrid');
+    const metaProjectCount = document.getElementById('metaProjectCount');
 
-      const openArcGisBtn = card.querySelector('[data-action="open-arcgis"]');
-      const isArcGis = ((card.getAttribute('data-report') || '').toLowerCase().includes('arc gis'));
+    const projectMeta = [
+      { name: 'ShadeLA', label: 'Urban Shade Study', status: 'Active', desc: 'Climate, shade, and urban digital twin content presented in a more immersive fullscreen-style portfolio card.' },
+      { name: 'Pando', label: 'Forest / Ecology', status: 'Active', desc: 'A portfolio-led project card with bold type, dark surfaces, and clear actions for every documentation asset.' },
+      { name: 'USGBC', label: 'Sustainability', status: 'Ready', desc: 'Editorial spacing and darker visual rhythm bring your content closer to the Trigger theme direction.' },
+      { name: 'Baldwin Hills', label: 'Regional Site', status: 'Ready', desc: 'Dark gradients, cinematic overlays, and streamlined navigation help the site feel more premium and portfolio-driven.' },
+      { name: 'Altadena', label: 'Field Study', status: 'Draft', desc: 'A strong template for adding richer project details later without changing the overall design system.' },
+      { name: 'PUHC PUEDE', label: 'Community Project', status: 'Draft', desc: 'The structure stays easy to edit while the design moves much closer to the fullscreen Trigger aesthetic.' },
+      { name: 'Reclamation', label: 'Water / Land', status: 'Draft', desc: 'Use this section for more technical documentation while preserving the premium visual presentation.' }
+    ];
 
-      const openStreamBtn = card.querySelector('[data-action="open-stream"]');
-      const streamLabel = card.querySelector('[data-role="streamLabel"]');
-      const isPixelStreaming = card.getAttribute('data-streaming') === 'pixel';
+    if(metaProjectCount){
+      metaProjectCount.textContent = String(projectMeta.length).padStart(2, '0');
+    }
 
-      const videoList = card.querySelector('[data-role="videoList"]');
-      const videoActions = card.querySelector('[data-role="videoActions"]');
-      const isVideo = card.getAttribute('data-video') === 'video';
+    function createAction(label, kind, enabled){
+      const a = document.createElement('a');
+      a.className = 'action' + (enabled ? '' : ' is-disabled');
+      a.href = '#';
+      a.textContent = `${label} ↗`;
+      a.setAttribute('data-action', kind);
+      return a;
+    }
 
-      if(card.getAttribute('data-pdf-source') === 'folder' && (card.getAttribute('data-report') || '').toLowerCase().includes('aura')){
-        const project = card.getAttribute('data-project') || '';
-        const url = auraPdfByProject[project];
-        if(url){
-          const decodedName = decodeURIComponent(url.split('/').pop() || 'report.pdf');
-          setCardPdf(card, viewBtn, fileName, { url, fileName: decodedName, objectUrl: false });
+    function renderProjects(){
+      if(!projectsGrid) return;
+      projectsGrid.innerHTML = '';
+
+      projectMeta.forEach((p) => {
+        const arcUrl = arcGisUrlByProject[p.name] || '';
+        const auraUrl = auraPdfByProject[p.name] || '';
+        const streamUrl = pixelStreamingUrlByProject[p.name] || '';
+        const videos = normalizeVideoItems(videoUrlByProject[p.name]);
+
+        const article = document.createElement('article');
+        article.className = 'project';
+        article.setAttribute('data-project', p.name);
+
+        const visual = document.createElement('div');
+        visual.className = 'project-visual';
+        article.appendChild(visual);
+
+        const content = document.createElement('div');
+        content.className = 'project-content';
+
+        const top = document.createElement('div');
+        top.className = 'project-top';
+
+        const left = document.createElement('div');
+        const label = document.createElement('div');
+        label.className = 'project-label';
+        label.textContent = p.label;
+        const h3 = document.createElement('h3');
+        h3.textContent = p.name;
+        left.appendChild(label);
+        left.appendChild(h3);
+
+        const status = document.createElement('div');
+        status.className = 'status';
+        status.textContent = p.status;
+
+        top.appendChild(left);
+        top.appendChild(status);
+
+        const desc = document.createElement('p');
+        desc.textContent = p.desc;
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        actions.appendChild(createAction('ArcGIS', 'arcgis', Boolean(arcUrl)));
+        actions.appendChild(createAction('AURA PDF', 'aura', Boolean(auraUrl)));
+        actions.appendChild(createAction('Flipthrough', 'flipthrough', Boolean(streamUrl)));
+
+        if(videos.length === 0){
+          actions.appendChild(createAction('Video', 'video', false));
+        }else if(videos.length === 1){
+          actions.appendChild(createAction('Video', 'video', true));
         }else{
-          setCardPdf(card, viewBtn, fileName, null);
-        }
-      }
-
-      if(isVideo && videoList && videoActions){
-        const project = card.getAttribute('data-project') || '';
-        const items = normalizeVideoItems(videoUrlByProject[project]);
-
-        videoActions.innerHTML = '';
-        videoList.innerHTML = '';
-
-        if(items.length === 0){
-          videoList.textContent = 'Not configured';
-        }else{
-          items.forEach((item) => {
-            const row = document.createElement('div');
-            row.textContent = item.title;
-            videoList.appendChild(row);
-
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'btn-secondary';
-            btn.textContent = `Open ${item.title}`;
-            btn.addEventListener('click', () => {
-              window.open(item.url, '_blank', 'noopener,noreferrer');
-            });
-            videoActions.appendChild(btn);
+          videos.forEach((v, idx) => {
+            const a = createAction(`Video ${idx + 1}`, `video-${idx}`, true);
+            actions.appendChild(a);
           });
         }
-      }
 
-      if(isPixelStreaming && openStreamBtn){
-        const project = card.getAttribute('data-project') || '';
-        const streamUrl = pixelStreamingUrlByProject[project] || '';
+        content.appendChild(top);
+        content.appendChild(desc);
+        content.appendChild(actions);
+        article.appendChild(content);
 
-        if(streamLabel){
-          streamLabel.textContent = streamUrl ? streamUrl : 'Not configured';
-        }
-
-        if(streamUrl){
-          openStreamBtn.disabled = false;
-          openStreamBtn.addEventListener('click', () => {
-            window.open(streamUrl, '_blank', 'noopener,noreferrer');
-          });
-        }else{
-          openStreamBtn.disabled = true;
-        }
-      }
-
-      if(isArcGis && openArcGisBtn){
-        const project = card.getAttribute('data-project') || '';
-        const arcUrl = arcGisUrlByProject[project] || '';
-
-        if(fileName){
-          if(arcUrl){
-            fileName.textContent = '';
-            fileName.style.display = 'none';
-          }else{
-            fileName.textContent = 'Not configured';
-            fileName.style.display = '';
-          }
-        }
-
-        if(arcUrl){
-          openArcGisBtn.disabled = false;
-          openArcGisBtn.addEventListener('click', () => {
-            window.open(arcUrl, '_blank', 'noopener,noreferrer');
-          });
-        }else{
-          openArcGisBtn.disabled = true;
-        }
-      }
-
-      if(viewBtn){
-        viewBtn.addEventListener('click', () => {
-          const pdf = pdfByCard.get(card);
-          if(!pdf || !pdf.url) return;
-          const project = card.getAttribute('data-project') || 'Project';
-          const report = card.getAttribute('data-report') || 'Report';
-          openModal(`${project} - ${report}`, pdf.url);
+        article.addEventListener('click', () => {
+          document.querySelectorAll('.project').forEach(el => el.classList.toggle('is-active', el === article));
         });
+
+        projectsGrid.appendChild(article);
+      });
+    }
+
+    renderProjects();
+
+    document.addEventListener('click', (e) => {
+      const actionEl = e.target && e.target.closest ? e.target.closest('.action[data-action]') : null;
+      if(!actionEl) return;
+      e.preventDefault();
+
+      const card = actionEl.closest('.project');
+      if(!card) return;
+      const project = card.getAttribute('data-project') || '';
+      const kind = actionEl.getAttribute('data-action') || '';
+
+      if(kind === 'arcgis'){
+        const url = arcGisUrlByProject[project] || '';
+        if(url) window.open(url, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      if(kind === 'aura'){
+        const url = auraPdfByProject[project] || '';
+        if(url) openModal(`${project} - AURA Report`, url);
+        return;
+      }
+
+      if(kind === 'flipthrough'){
+        const url = pixelStreamingUrlByProject[project] || '';
+        if(url) window.open(url, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      if(kind === 'video' || kind.startsWith('video-')){
+        const items = normalizeVideoItems(videoUrlByProject[project]);
+        if(items.length === 0) return;
+        if(kind === 'video'){
+          window.open(items[0].url, '_blank', 'noopener,noreferrer');
+          return;
+        }
+        const idx = Number(kind.replace('video-',''));
+        const item = items[idx];
+        if(item && item.url) window.open(item.url, '_blank', 'noopener,noreferrer');
+        return;
       }
     });
-
-    const projectCols = Array.from(document.querySelectorAll('.project-col'));
-    const projectPills = projectCols.map(col => col.querySelector('.project-pill'));
-
-    const titleConnectors = document.getElementById('titleConnectors');
-
-    function renderTitleConnectors(){
-      if(!titleConnectors) return;
-
-      const title = document.querySelector('.page-title');
-      if(!title) return;
-
-      const pills = projectPills.filter(Boolean);
-      if(pills.length === 0) return;
-
-      const titleRect = title.getBoundingClientRect();
-      const y0 = Math.round(titleRect.bottom + 10);
-
-      const centers = pills.map(p => {
-        const r = p.getBoundingClientRect();
-        return {
-          x: r.left + (r.width / 2),
-          y: r.top - 6
-        };
-      });
-
-      const minX = Math.min(...centers.map(c => c.x));
-      const maxX = Math.max(...centers.map(c => c.x));
-
-      titleConnectors.innerHTML = '';
-
-      const h = document.createElement('div');
-      h.className = 'tc-h';
-      h.style.left = `${Math.round(minX)}px`;
-      h.style.top = `${y0}px`;
-      h.style.width = `${Math.round(maxX - minX)}px`;
-      titleConnectors.appendChild(h);
-
-      centers.forEach(c => {
-        const v = document.createElement('div');
-        v.className = 'tc-v';
-        const hLineH = 4;
-        const top = y0 + hLineH;
-        const height = Math.max(0, Math.round(c.y - top));
-        v.style.left = `${Math.round(c.x - 2)}px`;
-        v.style.top = `${top}px`;
-        v.style.height = `${height}px`;
-        titleConnectors.appendChild(v);
-      });
-    }
-
-    function setActiveProjectCol(activeCol){
-      projectCols.forEach(col => col.classList.toggle('is-active', col === activeCol));
-    }
-
-    projectPills.forEach((pill, idx) => {
-      if(!pill) return;
-      pill.setAttribute('role', 'button');
-      pill.setAttribute('tabindex', '0');
-
-      pill.addEventListener('click', () => {
-        const col = projectCols[idx];
-        if(!col) return;
-
-        setActiveProjectCol(col);
-      });
-
-      pill.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' || e.key === ' '){
-          e.preventDefault();
-          pill.click();
-        }
-      });
-    });
-
-    renderTitleConnectors();
-    window.addEventListener('resize', renderTitleConnectors);
-    window.addEventListener('scroll', renderTitleConnectors, { passive: true });
   </script>
 </body>
 </html>
