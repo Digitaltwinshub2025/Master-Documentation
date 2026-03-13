@@ -344,10 +344,22 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.48)),
         radial-gradient(circle at top right, rgba(255,255,255,0.11), transparent 24%),
         radial-gradient(circle at 15% 80%, rgba(255,255,255,0.07), transparent 22%),
         linear-gradient(135deg, #1b1c24, #0e0f14 60%);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .project-visual::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.70)),
+        radial-gradient(circle at 70% 20%, rgba(0,0,0,0.20), transparent 55%);
+      pointer-events:none;
     }
 
     .project-visual::before {
@@ -957,6 +969,15 @@
     const projectsGrid = document.getElementById('projectsGrid');
     const metaProjectCount = document.getElementById('metaProjectCount');
 
+    const projectImageByName = {
+      'ShadeLA': 'ShadeLAA.png',
+      'Pando': 'Pandoo.png',
+      'USGBC': 'USGBC.png',
+      'Baldwin Hills': 'Baldwin Hills.png',
+      'PUHC PUEDE': 'ALLYBOOM.png',
+      'Reclamation': 'ASU RE.png'
+    };
+
     const projectMeta = [
       { name: 'ShadeLA', label: 'Urban Shade Study', status: 'Active', desc: 'Climate, shade, and urban digital twin content presented in a more immersive fullscreen-style portfolio card.' },
       { name: 'Pando', label: 'Forest / Ecology', status: 'Active', desc: 'A portfolio-led project card with bold type, dark surfaces, and clear actions for every documentation asset.' },
@@ -996,6 +1017,10 @@
 
         const visual = document.createElement('div');
         visual.className = 'project-visual';
+        const imageFile = projectImageByName[p.name];
+        if(imageFile){
+          visual.style.backgroundImage = `url(${encodeURI(imageFile)})`;
+        }
         article.appendChild(visual);
 
         const content = document.createElement('div');
