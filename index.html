@@ -886,6 +886,16 @@
       "USGBC": "https://lattcarch.maps.arcgis.com/apps/mapviewer/index.html?webmap=00d3c86165b147128031c7bba35bcb55"
     };
 
+    const cardImageByProject = {
+      "ShadeLA": "ShadeLAA.png",
+      "Pando": "Pandoo.png",
+      "USGBC": "USGBC.png",
+      "Baldwin Hills": "Baldwin Hills.png",
+      "Altadena": "Altadena Fire Rebuild_ Resilient, Equitable, and Community-Oriented Recovery Plan V100.png",
+      "PUHC PUEDE": "ALLYBOOM.png",
+      "Reclamation": "ASU RE.png"
+    };
+
     function openModal(title, url){
       modalTitle.textContent = title;
       modalFrame.src = url;
@@ -1000,6 +1010,20 @@
 
         const visual = document.createElement('div');
         visual.className = 'project-visual';
+
+        const imageFile = cardImageByProject[p.name];
+        if(imageFile){
+          const imageUrl = encodeURI(imageFile);
+          visual.style.backgroundImage = [
+            'linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.48))',
+            'radial-gradient(circle at top right, rgba(255,255,255,0.11), transparent 24%)',
+            'radial-gradient(circle at 15% 80%, rgba(255,255,255,0.07), transparent 22%)',
+            `url("${imageUrl}")`
+          ].join(', ');
+          visual.style.backgroundSize = 'auto, auto, auto, cover';
+          visual.style.backgroundPosition = '0 0, 0 0, 0 0, center';
+          visual.style.backgroundRepeat = 'no-repeat, no-repeat, no-repeat, no-repeat';
+        }
         article.appendChild(visual);
 
         const content = document.createElement('div');
